@@ -1,5 +1,6 @@
 # whisper_streaming
-Whisper realtime streaming for long speech-to-text transcription and translation
+Whisper realtime streaming for long speech-to-text transcription and translation  
+**[See README of this fork](README2.md)**
 
 **Turning Whisper into Real-Time Transcription System**
 
