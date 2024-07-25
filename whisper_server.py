@@ -62,7 +62,6 @@ async def audio_stream(websocket, path):
             
             if rms < SILENCE_THRESHOLD:
 
-                silence_started = True
                 silence_candidate.append(audio)
                 silence_candidate_len = sum(len(x) for x in silence_candidate)
 
@@ -72,7 +71,11 @@ async def audio_stream(websocket, path):
                     if current_time - last_silence_log_time >= 2:  # Check if 2 seconds have passed
                         logger.info("Silence detected")
                         last_silence_log_time = current_time  # Update the timestamp
+                    if not silence_started:
+                        online.finish()
                     online.init()
+
+                silence_started = True
             else:
                 if silence_started:
                     last_silence_log_time = 0
