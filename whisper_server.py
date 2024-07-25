@@ -101,6 +101,7 @@ async def audio_stream(websocket, path):
 parser = argparse.ArgumentParser()
 parser.add_argument('--silence-size', type=float, default=2.0, help='Silence segment size in seconds')
 parser.add_argument('--silence-threshold', type=float, default=0.01, help='Silence threshold')
+parser.add_argument('--port', type=int, default=43007)
 add_shared_args(parser)
 args = parser.parse_args()
 
@@ -121,7 +122,7 @@ logger = logging.getLogger(__name__)
 
 warm_up()
 logger.info("Server started")
-start_server = websockets.serve(audio_stream, 'localhost', 43007)
+start_server = websockets.serve(audio_stream, 'localhost', args.port)
 
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
