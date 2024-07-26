@@ -112,7 +112,7 @@ SAMPLING_RATE = 16000
 MIN_CHUNK_SIZE = args.min_chunk_size*SAMPLING_RATE
 SILENCE_SIZE = args.silence_size*SAMPLING_RATE
 SILENCE_THRESHOLD = args.silence_threshold
-SILENCE_TIME = 1;
+SILENCE_TIME = args.silence_size;
 
 start = time.time()
 
