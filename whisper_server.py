@@ -68,7 +68,7 @@ async def audio_stream(websocket, path):
                 if silence_candidate_len >= SILENCE_SIZE:
                     out = []
                     current_time = time.time()  # Get the current time
-                    if current_time - last_silence_log_time >= 2:  # Check if 2 seconds have passed
+                    if current_time - last_silence_log_time >= SILENCE_TIME:
                         logger.info("Silence detected")
                         last_silence_log_time = current_time  # Update the timestamp
                     
@@ -112,7 +112,7 @@ SAMPLING_RATE = 16000
 MIN_CHUNK_SIZE = args.min_chunk_size*SAMPLING_RATE
 SILENCE_SIZE = args.silence_size*SAMPLING_RATE
 SILENCE_THRESHOLD = args.silence_threshold
-
+SILENCE_TIME = 1;
 
 start = time.time()
 
