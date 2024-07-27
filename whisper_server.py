@@ -3,7 +3,9 @@ import websockets
 import numpy as np
 import soundfile
 import logging
+import json
 import os
+import re
 from whisper_online import *
 import argparse
 
@@ -34,6 +36,13 @@ def format_output_transcript(o):
     else:
         logger.debug("No text in this segment")
         return None
+
+
+def filter_noise(transcript):
+    if transcript.strip() == '.':
+        return ''
+    pattern = r'\bS\s'
+    return re.sub(pattern, '', transcript)
 
 
 async def audio_stream(websocket, path):
@@ -93,7 +102,8 @@ async def audio_stream(websocket, path):
 
             result = format_output_transcript(o)
             if result is not None:
-                await websocket.send(o[2])
+                print(json.dumps({"silence": silence_started, "transcript": filter_noise(o[2])}))
+                await websocket.send(json.dumps({"silence": silence_started, "transcript": filter_noise(o[2])}))
 
     except websockets.exceptions.ConnectionClosed:
         online.finish()
@@ -123,7 +133,7 @@ logger = logging.getLogger(__name__)
 
 warm_up()
 logger.info("Server started")
-start_server = websockets.serve(audio_stream, 'localhost', args.port)
+start_server = websockets.serve(audio_stream, '0.0.0.0', args.port)
 
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
