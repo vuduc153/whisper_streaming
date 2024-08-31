@@ -102,8 +102,7 @@ async def audio_stream(websocket, path):
 
             result = format_output_transcript(o)
             if result is not None:
-                print(json.dumps({"silence": silence_started, "transcript": filter_noise(o[2])}))
-                await websocket.send(json.dumps({"silence": silence_started, "transcript": filter_noise(o[2])}))
+                await websocket.send(json.dumps({"transcript": filter_noise(o[2])}))
 
     except websockets.exceptions.ConnectionClosed:
         online.finish()
